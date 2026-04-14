@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Happy Birthday Sir</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: black;
+      color: white;
+      overflow: hidden;
+    }
+
+    .background-grid {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      grid-template-rows: repeat(3, 1fr);
+      height: 100vh;
+      z-index: -2;
+    }
+
+    .bg-img {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-repeat: no-repeat;
+      filter: brightness(0.65) saturate(1.1);
+      animation: slowZoom 18s ease-in-out infinite alternate;
+    }
+
+    /* Target specific positions and zoom levels */
+    .bg-img:nth-child(1) { 
+      background-position: center 40%; 
+    }
+    .bg-img:nth-child(2) { 
+      background-position: center 30%; 
+      animation-delay: 2s; 
+    }
+    .bg-img:nth-child(3) { 
+      /* "Zoom out" effect by changing size to 100% */
+     /* background-size: 100% 100%; */
+      background-position: center 20%; 
+      animation-delay: 4s; 
+    }
+
+
+    .overlay-grad {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle, rgba(0,0,0,0.1), rgba(0,0,0,0.7));
+      z-index: -1;
+    }
+
+    .center-img {
+      position: absolute;
+      top: 38%; /* Raised position */
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      border: 4px solid rgba(255,255,255,0.9);
+      background-image: url('photo.jpg');
+      background-size: cover;
+      background-position: center top;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 25px rgba(255,255,255,0.25);
+      animation: popIn 1.2s cubic-bezier(.2,.8,.2,1) forwards;
+      animation-delay: 0.8s;
+      z-index: 2;
+
+    }
+
+    .glass {
+      position: absolute;
+      bottom: 40px;
+      right: 20px;
+      padding: 24px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(15px);
+      text-align: center;
+    }
+
+    button {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .music-btn {
+      background: linear-gradient(135deg, #6b8cff, #8fa3ff);
+      color: white;
+    }
+
+    .start-btn {
+      background: #ff6b81;
+      color: white;
+      display: none; /* hidden initially */
+    }
+
+    .confetti {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      top: -10px;
+      animation: fall 4s linear infinite;
+    }
+
+    @keyframes fall { to { transform: translateY(110vh); } }
+    @keyframes popIn { to { transform: translate(-50%, -50%) scale(1); } }
+    @keyframes slowZoom { from { transform: scale(1); } to { transform: scale(1.05); } }
+  </style>
+</head>
+
+<body>
+
+  <div class="background-grid">
+    <div class="bg-img" style="background-image:url('photo1.jpg')"></div>
+    <div class="bg-img" style="background-image:url('photo2.jpg')"></div>
+    <div class="bg-img" style="background-image:url('photo3.jpg')"></div>
+  </div>
+
+  <div class="overlay-grad"></div>
+  <div class="center-img"></div>
+
+  <div class="glass">
+    <h1>Happy Birthday Sir 🎉</h1>
+    <p>From your team ❤️</p>
+
+    <!-- Step 1 -->
+    <button class="music-btn" onclick="playMusic()">Tap to Enter 🎵</button>
+
+    <!-- Step 2 -->
+    <button id="startBtn" class="start-btn" onclick="startExperience()">Click to Begin</button>
+  </div>
+
+  <script>
+    const audio = new Audio('birthday.mp3');
+
+    // Confetti
+    setTimeout(() => {
+      const colors = ['#ff6b81','#feca57','#48dbfb','#1dd1a1','#ffffff'];
+      for (let i = 0; i < 80; i++) {
+        const c = document.createElement('div');
+        c.className = 'confetti';
+        c.style.left = Math.random() * 100 + 'vw';
+        c.style.background = colors[Math.floor(Math.random()*5)];
+        document.body.appendChild(c);
+      }
+    }, 1600);
+
+    function playMusic() {
+      audio.play().catch(()=>{});
+
+      // Show next button
+      document.getElementById("startBtn").style.display = "inline-block";
+    }
+
+    function startExperience() {
+      window.location.href = "next.html";
+    }
+  </script>
+
+</body>
+</html>
