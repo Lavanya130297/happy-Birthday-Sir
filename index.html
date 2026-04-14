@@ -34,21 +34,9 @@
       animation: slowZoom 18s ease-in-out infinite alternate;
     }
 
-    /* Target specific positions and zoom levels */
-    .bg-img:nth-child(1) { 
-      background-position: center 40%; 
-    }
-    .bg-img:nth-child(2) { 
-      background-position: center 30%; 
-      animation-delay: 2s; 
-    }
-    .bg-img:nth-child(3) { 
-      /* "Zoom out" effect by changing size to 100% */
-     /* background-size: 100% 100%; */
-      background-position: center 20%; 
-      animation-delay: 4s; 
-    }
-
+    .bg-img:nth-child(1) { background-position: center 40%; }
+    .bg-img:nth-child(2) { background-position: center 30%; animation-delay: 2s; }
+    .bg-img:nth-child(3) { background-position: center 20%; animation-delay: 4s; }
 
     .overlay-grad {
       position: fixed;
@@ -59,7 +47,7 @@
 
     .center-img {
       position: absolute;
-      top: 38%; /* Raised position */
+      top: 38%;
       left: 50%;
       transform: translate(-50%, -50%) scale(0);
       width: 180px;
@@ -73,7 +61,6 @@
       animation: popIn 1.2s cubic-bezier(.2,.8,.2,1) forwards;
       animation-delay: 0.8s;
       z-index: 2;
-
     }
 
     .glass {
@@ -93,30 +80,46 @@
       border-radius: 999px;
       cursor: pointer;
       margin-top: 10px;
+      color: white;
     }
 
     .music-btn {
       background: linear-gradient(135deg, #6b8cff, #8fa3ff);
-      color: white;
     }
 
     .start-btn {
       background: #ff6b81;
-      color: white;
-      display: none; /* hidden initially */
+      display: none;
     }
 
     .confetti {
       position: fixed;
       width: 8px;
       height: 8px;
-      top: -10px;
-      animation: fall 4s linear infinite;
+      top: 50%;
+      left: 50%;
+      z-index: 5;
     }
 
-    @keyframes fall { to { transform: translateY(110vh); } }
-    @keyframes popIn { to { transform: translate(-50%, -50%) scale(1); } }
-    @keyframes slowZoom { from { transform: scale(1); } to { transform: scale(1.05); } }
+    @keyframes burst {
+      0% {
+        transform: translate(0,0) scale(1) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--x), var(--y)) scale(0.8) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes popIn {
+      to { transform: translate(-50%, -50%) scale(1); }
+    }
+
+    @keyframes slowZoom {
+      from { transform: scale(1); }
+      to { transform: scale(1.05); }
+    }
   </style>
 </head>
 
@@ -135,33 +138,49 @@
     <h1>Happy Birthday Sir 🎉</h1>
     <p>From your team ❤️</p>
 
-    <!-- Step 1 -->
     <button class="music-btn" onclick="playMusic()">Tap to Enter 🎵</button>
-
-    <!-- Step 2 -->
     <button id="startBtn" class="start-btn" onclick="startExperience()">Click to Begin</button>
   </div>
 
   <script>
     const audio = new Audio('birthday.mp3');
 
-    // Confetti
-    setTimeout(() => {
-      const colors = ['#ff6b81','#feca57','#48dbfb','#1dd1a1','#ffffff'];
-      for (let i = 0; i < 80; i++) {
-        const c = document.createElement('div');
-        c.className = 'confetti';
-        c.style.left = Math.random() * 100 + 'vw';
-        c.style.background = colors[Math.floor(Math.random()*5)];
-        document.body.appendChild(c);
-      }
-    }, 1600);
-
     function playMusic() {
       audio.play().catch(()=>{});
 
       // Show next button
       document.getElementById("startBtn").style.display = "inline-block";
+
+      // CONFETTI BURST
+      const colors = ['#ff6b81','#feca57','#48dbfb','#1dd1a1','#ffffff'];
+
+      for (let i = 0; i < 120; i++) {
+        const c = document.createElement('div');
+        c.className = 'confetti';
+
+        c.style.background = colors[Math.floor(Math.random()*colors.length)];
+
+        // random direction
+        const x = (Math.random() - 0.5) * 800 + "px";
+        const y = (Math.random() - 0.5) * 800 + "px";
+
+        c.style.setProperty('--x', x);
+        c.style.setProperty('--y', y);
+
+        // random size
+        const size = Math.random()*6 + 4;
+        c.style.width = size + "px";
+        c.style.height = size + "px";
+
+        // random shape
+        c.style.borderRadius = Math.random() > 0.5 ? "50%" : "2px";
+
+        c.style.animation = "burst 1.5s ease-out forwards";
+
+        document.body.appendChild(c);
+
+        setTimeout(() => c.remove(), 1500);
+      }
     }
 
     function startExperience() {
